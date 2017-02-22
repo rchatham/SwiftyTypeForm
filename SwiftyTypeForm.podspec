@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SwiftyTypeForm"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "TypeForm-like UIViewController subclass."
   s.description  = <<-DESC
   TypeForm-like UIViewController subclass for data collection from user.
