@@ -115,33 +115,23 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
             textField.enablesReturnKeyAutomatically = true
             textField.returnKeyType = .done
             textField.inputAccessoryView = {
-                let toolbar = UIToolbar()
-                toolbar.setItems([UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(FormField.returnInput(_:)))], animated: false)
-                toolbar.sizeToFit()
-                return toolbar
-            }()
+                let button = UIBarButtonItem(
+                    barButtonSystemItem: .done,
+                    target: self,
+                    action: #selector(FormField.returnInput(_:))
+                )
+                $0.setItems([button], animated: false)
+                $0.sizeToFit()
+                return $0
+            } (UIToolbar())
             
             inputField = textField
             
         case .image(_):
-            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-            imageView.layer.cornerRadius = imageView.bounds.size.width/2
-            imageView.layer.borderWidth = 3.0
-            imageView.layer.borderColor = UIColor.white.cgColor
+            let imageView = UIImageView()
             imageView.isUserInteractionEnabled = true
-            imageView.contentMode = UIViewContentMode.scaleAspectFill
+            imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
-            
-            imageView.addConstraints([
-                    NSLayoutConstraint(item: imageView, attribute: .height,
-                                       relatedBy: .equal,
-                                       toItem: imageView, attribute: .width,
-                                       multiplier: 1.0, constant: 0.0),
-                    NSLayoutConstraint(item: imageView, attribute: .top,
-                                       relatedBy: .lessThanOrEqual,
-                                       toItem: imageView, attribute: .bottom,
-                                       multiplier: 1.0, constant: 100)
-                ])
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FormField.pickPhoto(_:)))
             imageView.addGestureRecognizer(tapGesture)
