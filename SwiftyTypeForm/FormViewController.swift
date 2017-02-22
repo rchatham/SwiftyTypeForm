@@ -19,7 +19,7 @@ open class FormViewController: UIViewController, FormViewDelegate {
      */
     public var formView: FormView? {
         didSet {
-            formView?.formDelegate = self
+            formView?.delegate = self
             view = formView
         }
     }

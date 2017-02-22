@@ -22,8 +22,8 @@ public protocol FormViewDataSource: class {
  */
 public final class FormView: UIView {
     
-    public weak var formDelegate: FormViewDelegate?
-    public weak var formDataSource: FormViewDataSource? {
+    public weak var delegate: FormViewDelegate?
+    public weak var dataSource: FormViewDataSource? {
         didSet {
             reloadForm()
         }
@@ -66,10 +66,10 @@ public final class FormView: UIView {
     }
     
     public func reloadForm() {
-        let count = formDataSource?.numberOfFormFields(self) ?? 0
+        let count = dataSource?.numberOfFormFields(self) ?? 0
         for i in 0..<max(count,stackView.arrangedSubviews.count) {
             
-            guard let data = formDataSource?.formView(self, dataForIndex: i)
+            guard let data = dataSource?.formView(self, dataForIndex: i)
                 else { continue }
             
             if i >= stackView.arrangedSubviews.count {
@@ -110,15 +110,20 @@ extension FormView: FormFieldDelegate {
         if let field = self.formField(at: idx+1) {
             field.becomeFirstResponder()
         } else {
+            let views = stackView.arrangedSubviews
+            
             UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.stackView.arrangedSubviews.forEach { $0.isHidden = false }
+                for view in views {
+                    view.isHidden = false
+                }
+//                views.forEach { $0.isHidden = false }
             }
         }
     }
 
     public func formField(_ formField: FormField, returnedWith data: FormData) {
         guard let idx = stackView.arrangedSubviews.index(of: formField) else { return }
-        formDelegate?.formView(self, fieldAtIndex: idx, returnedWithData: data)
+        delegate?.formView(self, fieldAtIndex: idx, returnedWithData: data)
     }
     
 }

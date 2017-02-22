@@ -28,8 +28,8 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
     
     public let stackView: UIStackView = {
         $0.axis = .vertical
-        $0.alignment = .center
-        $0.distribution = .equalSpacing
+        $0.alignment = .fill
+        $0.distribution = .fillProportionally
         $0.isLayoutMarginsRelativeArrangement = true
         $0.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
         $0.translatesAutoresizingMaskIntoConstraints = true

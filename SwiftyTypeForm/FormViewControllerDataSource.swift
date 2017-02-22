@@ -21,7 +21,7 @@ public final class FormViewControllerDataSource: FormViewDataSource {
     
     public weak var formView: FormView? {
         didSet {
-            formView?.formDataSource = self
+            formView?.dataSource = self
         }
     }
     
