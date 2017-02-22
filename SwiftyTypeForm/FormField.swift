@@ -12,6 +12,7 @@ import PhoneNumberKit
 
 public protocol FormFieldDelegate: class {
     func formField(_ formField: FormField, returnedWith data: FormData)
+    func formFieldDidEndEditing(_ formField: FormField)
     func formFieldCancelled(_ formField: FormField)
     func formFieldWasSelected(_ formField: FormField)
 }
@@ -70,6 +71,7 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
     
     @objc internal func tap(_ sender: UITapGestureRecognizer) {
         resignFirstResponder()
+        delegate?.formFieldCancelled(self)
     }
     
     @discardableResult
@@ -142,15 +144,13 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
         dataType = data.type
         
         stackView.addArrangedSubview(inputField)
-        inputField.isHidden = false
-        layoutSubviews()
     }
     
     @discardableResult
     @objc internal func returnInput(_ sender: Any) -> Bool {
         let input = getInput()
         delegate?.formField(self, returnedWith: input)
-        inputField.resignFirstResponder()
+        resignFirstResponder()
         return true
     }
     
@@ -198,7 +198,7 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
     }
     
     @objc public func textFieldDidEndEditing(_ textField: UITextField) {
-        delegate?.formFieldCancelled(self)
+        delegate?.formFieldDidEndEditing(self)
     }
 }
 

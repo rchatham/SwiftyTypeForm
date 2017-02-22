@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol FormViewDelegate: class {
-    func formView(_ formView: FormView, fieldAtIndex index: Int, returnedWithData data: FormData)
+    func formView(_ formView: FormView, fieldAtIndex index: Int, returnedWithData data: FormData) -> Bool
 }
 
 public protocol FormViewDataSource: class {
@@ -39,6 +39,8 @@ public final class FormView: UIView {
             reloadForm()
         }
     }
+    
+    public fileprivate(set) var selectedIndex: Int?
     
     fileprivate let scrollView: UIScrollView = {
         $0.isScrollEnabled = true
@@ -101,6 +103,12 @@ public final class FormView: UIView {
         }
     }
     
+    public func animate(to index: Int) {
+        if let field = formField(at: index) {
+            field.becomeFirstResponder()
+        }
+    }
+    
     private func configurationUpdated() {
         backgroundColor = configuration.backgroundColor
         alpha = configuration.alpha
@@ -126,6 +134,7 @@ extension FormView: FormFieldDataSource {}
 extension FormView: FormFieldDelegate {
 
     public func formFieldWasSelected(_ formField: FormField) {
+        selectedIndex = stackView.arrangedSubviews.index(of: formField)
         UIView.animate(withDuration: 0.3) { [weak self] in
             formField.isHidden = false
             self?.stackView.arrangedSubviews
@@ -133,25 +142,29 @@ extension FormView: FormFieldDelegate {
                 .forEach { $0.isHidden = true }
         }
     }
+    
+    public func formFieldDidEndEditing(_ formField: FormField) {
+        
+    }
 
     public func formFieldCancelled(_ formField: FormField) {
-        guard let idx = stackView.arrangedSubviews.index(of: formField) else { return }
-        if let field = self.formField(at: idx+1) {
-            field.becomeFirstResponder()
-        } else {
-            let views = stackView.arrangedSubviews
-            
-            UIView.animate(withDuration: 0.3) {
-                for view in views {
-                    view.isHidden = false
-                }
+        let views = stackView.arrangedSubviews
+        UIView.animate(withDuration: 0.3) {
+            for view in views {
+                view.isHidden = false
             }
         }
     }
 
     public func formField(_ formField: FormField, returnedWith data: FormData) {
         guard let idx = stackView.arrangedSubviews.index(of: formField) else { return }
-        delegate?.formView(self, fieldAtIndex: idx, returnedWithData: data)
+        if delegate?.formView(self, fieldAtIndex: idx, returnedWithData: data) ?? false {
+            if idx+1 < stackView.arrangedSubviews.count {
+                animate(to: idx+1)
+            } else {
+                formFieldCancelled(formField)
+            }
+        }
     }
     
 }

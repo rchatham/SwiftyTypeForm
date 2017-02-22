@@ -17,7 +17,7 @@ open class FormViewController: UIViewController, FormViewDelegate {
     /**
      Holds a reference to the FormView. Sets the FormViewController's view property to the formView when set and sets the formView's formDelegate property to itself.
      */
-    public var formView: FormView? {
+    open var formView: FormView? {
         didSet {
             formView?.delegate = self
             view = formView
@@ -27,7 +27,7 @@ open class FormViewController: UIViewController, FormViewDelegate {
     /**
      Optional FormViewControllerDataSource property that sets the FormViewController to its formView property and sets itself to the formView's formDataSource property.
      */
-    public var dataSource: FormViewControllerDataSource? {
+    open var dataSource: FormViewControllerDataSource? {
         didSet {
             dataSource?.formView = formView
         }
@@ -42,7 +42,8 @@ open class FormViewController: UIViewController, FormViewDelegate {
 
     // MARK: - FormViewDelegate
     
-    public func formView(_ formView: FormView, fieldAtIndex index: Int, returnedWithData data: FormData) {
+    open func formView(_ formView: FormView, fieldAtIndex index: Int, returnedWithData data: FormData) -> Bool {
         dataSource?.formData[index] = data
+        return true
     }
 }
