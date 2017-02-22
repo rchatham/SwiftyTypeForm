@@ -14,13 +14,24 @@ public protocol FormViewDelegate: class {
 
 public protocol FormViewDataSource: class {
     func numberOfFormFields(_ formView: FormView) -> Int
-    func formView(_ formView: FormView, dataForIndex index: Int) -> FormData?
+    func formView(_ formView: FormView, formDataForIndex index: Int) -> FormData
+    func formView(_ formView: FormView, formFieldConfigurationForIndex index: Int) -> FormFieldConfiguration?
+}
+
+extension FormViewDataSource {
+    public func formView(_ formView: FormView, formFieldConfigurationForIndex index: Int) -> FormFieldConfiguration? { return nil }
 }
 
 /**
  FormView - Manages the stack view containing the FormField's
  */
 public final class FormView: UIView {
+    
+    public var configuration: FormViewConfiguration = FormViewConfiguration() {
+        didSet {
+            configurationUpdated()
+        }
+    }
     
     public weak var delegate: FormViewDelegate?
     public weak var dataSource: FormViewDataSource? {
@@ -29,27 +40,23 @@ public final class FormView: UIView {
         }
     }
     
-    fileprivate let stackView: UIStackView = {
-        $0.axis = .vertical
-        $0.alignment = .fill
-        $0.distribution = .fillEqually
-        $0.isBaselineRelativeArrangement = true
-        $0.isLayoutMarginsRelativeArrangement = true
-        $0.spacing = 10.0
+    fileprivate let scrollView: UIScrollView = {
+        $0.isScrollEnabled = true
         return $0
-    } (UIStackView(arrangedSubviews: []))
+    } (UIScrollView())
+    
+    fileprivate let stackView = UIStackView(arrangedSubviews: [])
 
-    override public init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let scrollView: UIScrollView = {
-            $0.isScrollEnabled = true
-            return $0
-        } (UIScrollView(frame: frame))
+        scrollView.frame = frame
         addSubview(scrollView)
         
-        stackView.frame = frame
+        stackView.center = scrollView.center
         scrollView.addSubview(stackView)
+        
+        configurationUpdated()
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -69,8 +76,7 @@ public final class FormView: UIView {
         let count = dataSource?.numberOfFormFields(self) ?? 0
         for i in 0..<max(count,stackView.arrangedSubviews.count) {
             
-            guard let data = dataSource?.formView(self, dataForIndex: i)
-                else { continue }
+            guard let data = dataSource?.formView(self, formDataForIndex: i) else { continue }
             
             if i >= stackView.arrangedSubviews.count {
                 let field = FormField(dataType: data.type)
@@ -87,7 +93,30 @@ public final class FormView: UIView {
                 field.configure(for: data)
                 
             }
+            
+            if let field = formField(at: i),
+                let configuration = dataSource?.formView(self, formFieldConfigurationForIndex: i) {
+                field.configuration = configuration
+            }
         }
+    }
+    
+    private func configurationUpdated() {
+        backgroundColor = configuration.backgroundColor
+        alpha = configuration.alpha
+        
+        _ = {
+            $0.contentInset = configuration.contentInset
+        } (scrollView)
+        
+        _ = {
+            $0.axis = configuration.axis
+            $0.alignment = configuration.alignment
+            $0.distribution = configuration.distribution
+            $0.spacing = configuration.spacing
+            $0.isBaselineRelativeArrangement = configuration.isBaselineRelativeArrangement
+            $0.isLayoutMarginsRelativeArrangement = configuration.isLayoutMarginsRelativeArrangement
+        } (stackView)
     }
 
 }
@@ -112,11 +141,10 @@ extension FormView: FormFieldDelegate {
         } else {
             let views = stackView.arrangedSubviews
             
-            UIView.animate(withDuration: 0.3) { [weak self] in
+            UIView.animate(withDuration: 0.3) {
                 for view in views {
                     view.isHidden = false
                 }
-//                views.forEach { $0.isHidden = false }
             }
         }
     }

@@ -21,21 +21,18 @@ public protocol FormFieldDataSource: class {}
 
 public final class FormField: UIView, UITextFieldDelegate, FormType {
     
+    public var configuration: FormFieldConfiguration = FormFieldConfiguration() {
+        didSet {
+            configurationUpdated()
+        }
+    }
+    
     private(set) public var dataType: FormDataType = .text
     
     public weak var dataSource: FormFieldDataSource?
     public weak var delegate: FormFieldDelegate?
     
-    public let stackView: UIStackView = {
-        $0.axis = .vertical
-        $0.alignment = .fill
-        $0.distribution = .fillProportionally
-        $0.isLayoutMarginsRelativeArrangement = true
-        $0.autoresizingMask = [ .flexibleWidth, .flexibleHeight ]
-        $0.translatesAutoresizingMaskIntoConstraints = true
-        $0.spacing = 10.0
-        return $0
-    } (UIStackView(arrangedSubviews: []))
+    fileprivate let stackView = UIStackView(arrangedSubviews: [])
     
     public var titleLabel: UILabel!
     public var inputField: UIView!
@@ -69,17 +66,6 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setup() {
-        
-        backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        
-        let tap = UITapGestureRecognizer(
-            target: self,
-            action: #selector(FormField.tap(_:))
-        )
-        addGestureRecognizer(tap)
     }
     
     @objc internal func tap(_ sender: UITapGestureRecognizer) {
@@ -186,6 +172,29 @@ public final class FormField: UIView, UITextFieldDelegate, FormType {
                 self?.returnInput(sender)
             }
         }
+    }
+    
+    private func setup() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(FormField.tap(_:))
+        )
+        addGestureRecognizer(tap)
+        configurationUpdated()
+    }
+    
+    private func configurationUpdated() {
+        backgroundColor = configuration.backgroundColor
+        alpha = configuration.alpha
+        
+        _ = {
+            $0.axis = configuration.axis
+            $0.alignment = configuration.alignment
+            $0.distribution = configuration.distribution
+            $0.isBaselineRelativeArrangement = configuration.isBaselineRelativeArrangement
+            $0.isLayoutMarginsRelativeArrangement = configuration.isLayoutMarginsRelativeArrangement
+            $0.spacing = configuration.spacing
+        } (stackView)
     }
 
     // MARK: - UITextFieldDelegate

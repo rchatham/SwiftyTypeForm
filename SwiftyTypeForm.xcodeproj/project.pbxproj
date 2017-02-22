@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		300CFE1C1E5E103B008CA5F5 /* FormFieldConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300CFE1B1E5E103B008CA5F5 /* FormFieldConfiguration.swift */; };
+		300CFE1E1E5E107B008CA5F5 /* FormViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300CFE1D1E5E107B008CA5F5 /* FormViewConfiguration.swift */; };
 		30ACEC611E5CC4D2006048E2 /* SwiftyTypeForm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30ACEC571E5CC4D2006048E2 /* SwiftyTypeForm.framework */; };
 		30ACEC661E5CC4D2006048E2 /* SwiftyTypeFormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ACEC651E5CC4D2006048E2 /* SwiftyTypeFormTests.swift */; };
 		30ACEC681E5CC4D2006048E2 /* SwiftyTypeForm.h in Headers */ = {isa = PBXBuildFile; fileRef = 30ACEC5A1E5CC4D2006048E2 /* SwiftyTypeForm.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -30,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		300CFE1B1E5E103B008CA5F5 /* FormFieldConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormFieldConfiguration.swift; sourceTree = "<group>"; };
+		300CFE1D1E5E107B008CA5F5 /* FormViewConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormViewConfiguration.swift; sourceTree = "<group>"; };
 		30ACEC571E5CC4D2006048E2 /* SwiftyTypeForm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyTypeForm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30ACEC5A1E5CC4D2006048E2 /* SwiftyTypeForm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyTypeForm.h; sourceTree = "<group>"; };
 		30ACEC5B1E5CC4D2006048E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -96,7 +100,9 @@
 				30ACEC5A1E5CC4D2006048E2 /* SwiftyTypeForm.h */,
 				30ACEC711E5CC4F2006048E2 /* FormData.swift */,
 				30ACEC721E5CC4F2006048E2 /* FormField.swift */,
+				300CFE1B1E5E103B008CA5F5 /* FormFieldConfiguration.swift */,
 				30ACEC731E5CC4F2006048E2 /* FormView.swift */,
+				300CFE1D1E5E107B008CA5F5 /* FormViewConfiguration.swift */,
 				30ACEC741E5CC4F2006048E2 /* FormViewController.swift */,
 				30ACEC761E5CC4F2006048E2 /* FormViewControllerDataSource.swift */,
 				30ACEC5B1E5CC4D2006048E2 /* Info.plist */,
@@ -328,10 +334,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				30ACEC791E5CC4F2006048E2 /* FormView.swift in Sources */,
+				300CFE1C1E5E103B008CA5F5 /* FormFieldConfiguration.swift in Sources */,
 				30ACEC781E5CC4F2006048E2 /* FormField.swift in Sources */,
 				30ACEC7A1E5CC4F2006048E2 /* FormViewController.swift in Sources */,
 				30ACEC7C1E5CC4F2006048E2 /* FormViewControllerDataSource.swift in Sources */,
 				30ACEC771E5CC4F2006048E2 /* FormData.swift in Sources */,
+				300CFE1E1E5E107B008CA5F5 /* FormViewConfiguration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

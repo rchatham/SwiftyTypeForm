@@ -31,7 +31,7 @@ public final class FormViewControllerDataSource: FormViewDataSource {
         return formData.count
     }
     
-    public func formView(_ formView: FormView, dataForIndex index: Int) -> FormData? {
+    public func formView(_ formView: FormView, formDataForIndex index: Int) -> FormData {
         return formData[index]
     }
     
