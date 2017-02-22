@@ -1,0 +1,6 @@
+framework module Pods_SwiftyTypeForm {
+  umbrella header "Pods-SwiftyTypeForm-umbrella.h"
+
+  export *
+  module * { export * }
+}

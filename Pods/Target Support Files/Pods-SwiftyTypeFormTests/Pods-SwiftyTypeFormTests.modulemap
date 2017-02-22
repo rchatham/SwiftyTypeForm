@@ -1,0 +1,6 @@
+framework module Pods_SwiftyTypeFormTests {
+  umbrella header "Pods-SwiftyTypeFormTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
